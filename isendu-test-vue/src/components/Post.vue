@@ -12,6 +12,8 @@
 </template>
 
 <script>
+// import { mapState } from "vuex";
+
 export default {
   name: "Post",
   props: {
@@ -29,6 +31,14 @@ export default {
     post() {
       return this.posts.find((post) => post.id === this.id);
     },
+    // ...mapState({
+    //   title: (state) => state.posts.title,
+    // }),
+  },
+  methods: {
+    // updateTitle(e) {
+    //   this.$store.commit("UPDATE_Title", e.target.value);
+    // },
   },
 };
 </script>

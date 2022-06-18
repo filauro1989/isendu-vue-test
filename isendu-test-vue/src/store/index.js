@@ -22,8 +22,11 @@ export default new Vuex.Store({
       );
       state.posts.splice(postToDelete, 1);
     },
+    // UPDATE_Title(state, title) {
+    //   state.posts.title = title;
+    // },
 
-    // Funzione alternativa, fatta perché la prima non andava per errore di battitura
+    // Funzione alternativa, fatta perché la prima non andava per errore di battitura(im retarded)
     // DELETE_Post(state, index) {
     //   const postIndex = state.posts.map((post) => post.id).indexOf(index.id);
     //   state.posts.splice(postIndex, 1);
@@ -36,7 +39,7 @@ export default new Vuex.Store({
         .get("https://jsonplaceholder.typicode.com/posts")
         .then((response) => response.data)
         .then((posts) => {
-          console.log(posts);
+          // console.log(posts);
           commit("SET_Posts", posts);
         });
     },
