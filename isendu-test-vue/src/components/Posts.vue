@@ -18,6 +18,7 @@
           }"
           >View Post</router-link
         >
+        <!-- button per aprire il modale di modifica del post -->
         <button class="btn btn-primary mx-2" v-b-modal="'modal' + post.id">
           Edit Post
         </button>
@@ -32,12 +33,19 @@
               class="my-2"
               type="title"
               name="title"
-              id="title"
-              value="title"
+              :id="'title' + post.id"
+              v-model="titleToUpdate"
+            />
+            <label for="body">Modifica messaggio del post</label>
+            <input
+              class="my-2"
+              type="text"
+              name="body"
+              :id="'body' + post.id"
+              v-model="bodyToUpdate"
             />
 
-            <label for="body">Modifica messaggio del post</label>
-            <input class="my-2" type="text" name="body" id="body" />
+            <button @click="updatePost(post.id)" class="btn">salva</button>
           </div>
         </b-modal>
         <!-- al click avvio la funzione di cancellazione -->
@@ -54,18 +62,49 @@ import { mapState } from "vuex";
 
 export default {
   name: "Posts",
+  data() {
+    return {
+      titleToUpdate: null,
+      bodyToUpdate: null,
+    };
+  },
   methods: {
     // passo alla funzione il post e avvio la funzione nella mutation
     deletePost(post) {
       this.$store.commit("DELETE_Post", post);
+    },
+    // passo alla funzione l'id del post avvio mutations inviando dati da modificare + id
+    updatePost(id) {
+      if (this.titleToUpdate && this.bodyToUpdate) {
+        const titleToPush = this.titleToUpdate;
+        const bodyToPush = this.bodyToUpdate;
+        this.$store.commit("UPDATE_Title", { id, titleToPush });
+        this.$store.commit("UPDATE_Body", { id, bodyToPush });
+      } else if (this.titleToUpdate) {
+        const titleToPush = this.titleToUpdate;
+        this.$store.commit("UPDATE_Title", { id, titleToPush });
+      } else if (this.bodyToUpdate) {
+        const bodyToPush = this.bodyToUpdate;
+        this.$store.commit("UPDATE_Body", { id, bodyToPush });
+      }
     },
   },
   //   avvio la funzione loadPosts per caricare tutti i dati dallo store
   mounted() {
     this.$store.dispatch("loadPosts");
   },
-  //   richiamo l'oggetto dallo store
-  computed: mapState(["posts"]),
+  //   richiamo l'array dallo store
+  computed: {
+    ...mapState(["posts"]),
+    // title: {
+    //   get() {
+    //     return this.$store.state.posts.title;
+    //   },
+    //   set(value) {
+    //     this.$store.commit("updateTitle", value);
+    //   },
+    // },
+  },
 };
 </script>
 

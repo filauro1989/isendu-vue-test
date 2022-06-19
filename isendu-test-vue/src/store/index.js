@@ -9,28 +9,38 @@ Vue.use(VueAxios, axios);
 export default new Vuex.Store({
   state: {
     posts: [],
+    cane: { message: "" },
   },
   mutations: {
     //funzione per pushare nell'array posts i dati
     SET_Posts(state, posts) {
       state.posts = posts;
     },
-    // funzione per cancellare il post dall'array. Cerco nell'array il post con lo stesso ID e lo elimino dallo state
+    // Cerco nell'array l'oggetto con lo stesso ID e lo elimino dallo state
     DELETE_Post(state, toBeDeleted) {
       const postToDelete = state.posts.find(
         (post) => toBeDeleted.id === post.id
       );
       state.posts.splice(postToDelete, 1);
     },
-    // UPDATE_Title(state, title) {
-    //   state.posts.title = title;
-    // },
-
-    // Funzione alternativa, fatta perché la prima non andava per errore di battitura(im retarded)
-    // DELETE_Post(state, index) {
-    //   const postIndex = state.posts.map((post) => post.id).indexOf(index.id);
-    //   state.posts.splice(postIndex, 1);
-    // },
+    // ciclo nell'array e cerco l'oggetto con lo stesso id per modificargli il titolo
+    UPDATE_Title(state, { id, titleToPush }) {
+      const posts = this.state.posts;
+      for (const post of posts) {
+        if (post.id === id) {
+          post.title = titleToPush;
+        }
+      }
+    },
+    // ciclo nell'array e cerco l'oggetto con lo stesso id per modificargli il body
+    UPDATE_Body(state, { id, bodyToPush }) {
+      const posts = this.state.posts;
+      for (const post of posts) {
+        if (post.id === id) {
+          post.body = bodyToPush;
+        }
+      }
+    },
   },
   actions: {
     // richiamo dati dall'API e avvio la funzione SET_Posts
