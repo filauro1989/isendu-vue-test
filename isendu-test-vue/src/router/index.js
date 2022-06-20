@@ -19,12 +19,13 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
+
+  // nuova rotta per visual singola di ogni post con id dinamico
   {
     path: "/posts/:id",
     name: "post",
     props: true,
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../components/Post.vue"),
+    component: () => import("../components/Post.vue"),
   },
 ];
 

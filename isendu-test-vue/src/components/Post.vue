@@ -1,19 +1,25 @@
 <template>
-  <div class="container">
-    <div class="card">
-      <div class="card-body">
-        <h3 class="card-title">Post id n°{{ post.id }}</h3>
-        <h3 class="card-title">User id n°{{ post.userId }}</h3>
-        <h5 class="card-title">{{ post.title }}</h5>
-        <p class="card-text">{{ post.body }}</p>
+  <div class="container h-100 post-view d-flex justify-content-center">
+    <div class="card w-50 h-75">
+      <div class="card-body p-3">
+        <div class="text-container h-100 p-4">
+          <div
+            class="card-title d-flex align-items-center justify-content-center h-40 mb-0 py-3"
+          >
+            {{ post.title }}
+          </div>
+          <p class="card-text h-40 mb-0 py-3">
+            {{ post.body }}
+          </p>
+          <div class="h-10 py-2">Post id n°{{ post.id }}</div>
+          <div class="h-10 py-2">User id n°{{ post.userId }}</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import { mapState } from "vuex";
-
 export default {
   name: "Post",
   props: {
@@ -31,14 +37,6 @@ export default {
     post() {
       return this.posts.find((post) => post.id === this.id);
     },
-    // ...mapState({
-    //   title: (state) => state.posts.title,
-    // }),
-  },
-  methods: {
-    // updateTitle(e) {
-    //   this.$store.commit("UPDATE_Title", e.target.value);
-    // },
   },
 };
 </script>

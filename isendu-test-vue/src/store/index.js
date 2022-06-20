@@ -41,12 +41,6 @@ export default new Vuex.Store({
         }
       }
     },
-    // FILTER_ByTitle(state, text) {
-    //   const filtered = this.state.posts.filter((post) =>
-    //     post.title.includes(text)
-    //   );
-    //   console.log(filtered);
-    // },
   },
   actions: {
     // richiamo dati dall'API e avvio la funzione SET_Posts
@@ -59,9 +53,6 @@ export default new Vuex.Store({
           commit("SET_Posts", posts);
         });
     },
-    // filter({ commit, text }) {
-    //   commit("FILTER_ByTitle", text);
-    // },
   },
   modules: {},
 });

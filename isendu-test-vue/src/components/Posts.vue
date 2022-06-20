@@ -1,25 +1,39 @@
 <template>
   <div class="container">
-    <label for="titlesearchbox">Cerca nel titolo</label>
-    <input class="m-2" id="titlesearchbox" type="text" v-model="searchTitle" />
-
-    <label for="bodysearchbox">Cerca nel testo</label>
-    <input class="m-2" id="bodysearchbox" type="text" v-model="searchBody" />
+    <div
+      class="filter-box d-flex justify-content-center align-items-center rounded mb-2"
+    >
+      <label for="titlesearchbox">Cerca nel titolo</label>
+      <input
+        class="m-2"
+        id="titlesearchbox"
+        type="text"
+        v-model="searchTitle"
+      />
+      <label for="bodysearchbox">Cerca nel testo</label>
+      <input class="m-2" id="bodysearchbox" type="text" v-model="searchBody" />
+    </div>
 
     <!-- ciclo sull'oggetto posts richiamato dalla computed -->
-    <div class="wrapper d-flex flex-wrap">
-      <div v-for="post in filteredArray" :key="post.id" class="card my-1 w-25">
+    <div class="cards-wrapper d-flex flex-wrap justify-content-around">
+      <div v-for="post in filteredArray" :key="post.id" class="card my-2 w-33">
         <div class="card-body">
-          <div class="text-container">
-            <h5 class="card-title">Post id n°{{ post.id }}</h5>
-            <h5 class="card-title">User id n°{{ post.userId }}</h5>
-            <h3 class="card-title">{{ post.title }}</h3>
-            <p class="card-text">{{ post.body }}</p>
+          <div class="text-container p-4">
+            <div
+              class="card-title d-flex align-items-center justify-content-center h-40 mb-0 py-3"
+            >
+              {{ post.title }}
+            </div>
+            <p class="card-text h-40 mb-0 py-3">
+              {{ post.body }}
+            </p>
+            <div class="h-10 py-2">Post id n°{{ post.id }}</div>
+            <div class="h-10 py-2">User id n°{{ post.userId }}</div>
           </div>
           <!-- link al post singolo passando come props l'id del post -->
-          <div class="button-container d-flex justify-content-center">
+          <div class="button-container d-flex justify-content-center p-4">
             <router-link
-              class="btn btn-primary mx-2"
+              class="btn btn-primary mx-2 d-flex align-items-center"
               :to="{
                 name: 'post',
                 params: {
@@ -29,6 +43,7 @@
               >View</router-link
             >
 
+            <!-- Modale per editare post -->
             <b-button
               :id="'show-btn' + post.id"
               @click="$bvModal.show('modal' + post.id)"
@@ -77,7 +92,10 @@
               </div>
             </b-modal>
             <!-- al click avvio la funzione di cancellazione -->
-            <div @click="deletePost(post)" class="btn btn-danger mx-2">
+            <div
+              @click="deletePost(post)"
+              class="btn btn-danger mx-2 d-flex align-items-center"
+            >
               Delete
             </div>
           </div>
@@ -132,25 +150,23 @@ export default {
   computed: {
     ...mapState(["posts"]),
 
-    // filtra() {
-    //   const text = this.search;
-    //   return this.$store.commit("FILTER_ByTitle", text);
-    // },
-    // filtro l'array utilizzando la variabile search
+    // funzione di filtro tramite input box per titolo
     filteredByTitle() {
       let text = this.searchTitle;
-      // text = text.replace(/\s+/g, "");
       let filtered = [];
+      // se input box non è vuoto allora popolo array filtered con posts che contengono il testo digitato nel titolo
       if (text != "") {
         filtered = this.posts.filter((post) =>
           post.title.includes(text.toLowerCase())
         );
-      } else {
+      }
+      // altrimenti svuoto array vuoto
+      else {
         filtered = [];
       }
-      console.log(filtered);
       return filtered;
     },
+    // funzione di filtro tramite input box per body
     filteredByBody() {
       const text = this.searchBody;
       let filtered = [];
@@ -163,16 +179,24 @@ export default {
       }
       return filtered;
     },
+    // funzione per filtro incrociato
     filteredArray() {
       let filtered = [];
 
+      // se entrambe le input box sono vuote rimando l'array originale
       if (this.searchTitle == "" && this.searchBody == "") {
         filtered = this.posts;
-      } else if (this.searchTitle != "" && this.searchBody == "") {
+      }
+      // se input titolo è popolata e input body vuota faccio andare solo il filtro per titolo
+      else if (this.searchTitle != "" && this.searchBody == "") {
         filtered = this.filteredByTitle;
-      } else if (this.searchTitle == "" && this.searchBody != "") {
+      }
+      // se input body è popolata e input titolo vuota faccio andare solo il filtro per body
+      else if (this.searchTitle == "" && this.searchBody != "") {
         filtered = this.filteredByBody;
-      } else {
+      }
+      // altrimenti ciclo sull'array filtrato per titolo e, per ogni post filtrato dal body, controllo se l'id corrisponde. Se id corrisponde pusho nell'array filtered
+      else {
         this.filteredByTitle.forEach((titleFiltered) => {
           this.filteredByBody.forEach((bodyFiltered) => {
             if (titleFiltered.id == bodyFiltered.id) {
@@ -187,11 +211,4 @@ export default {
 };
 </script>
 
-<style>
-.text-container {
-  height: 90%;
-}
-.button-container {
-  height: 10%;
-}
-</style>
+<style></style>
