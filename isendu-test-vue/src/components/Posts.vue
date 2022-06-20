@@ -138,33 +138,49 @@ export default {
     // },
     // filtro l'array utilizzando la variabile search
     filteredByTitle() {
-      const text = this.searchTitle;
-      let filtered = this.posts;
-      if (text != null) {
+      let text = this.searchTitle;
+      // text = text.replace(/\s+/g, "");
+      let filtered = [];
+      if (text != "") {
         filtered = this.posts.filter((post) =>
           post.title.includes(text.toLowerCase())
         );
+      } else {
+        filtered = [];
       }
+      console.log(filtered);
       return filtered;
     },
     filteredByBody() {
       const text = this.searchBody;
-      let filtered = this.posts;
-      if (text != null) {
+      let filtered = [];
+      if (text != "") {
         filtered = this.posts.filter((post) =>
-          post.title.includes(text.toLowerCase())
+          post.body.includes(text.toLowerCase())
         );
+      } else {
+        filtered = [];
       }
       return filtered;
     },
     filteredArray() {
-      let filtered = this.posts;
-      // let title = this.filteredByTitle;
-      // let body = this.filteredByBody;
-      // title.forEach((element) => {
-      //   console.log("element", element);
-      //   console.log(body);
-      // });
+      let filtered = [];
+
+      if (this.searchTitle == "" && this.searchBody == "") {
+        filtered = this.posts;
+      } else if (this.searchTitle != "" && this.searchBody == "") {
+        filtered = this.filteredByTitle;
+      } else if (this.searchTitle == "" && this.searchBody != "") {
+        filtered = this.filteredByBody;
+      } else {
+        this.filteredByTitle.forEach((titleFiltered) => {
+          this.filteredByBody.forEach((bodyFiltered) => {
+            if (titleFiltered.id == bodyFiltered.id) {
+              filtered.push(bodyFiltered);
+            }
+          });
+        });
+      }
       return filtered;
     },
   },
